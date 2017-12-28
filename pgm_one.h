@@ -17,7 +17,7 @@ int x_size1, y_size1;                               //image1の横画素数，�
 /***********************************************************/
 /*                   関数プロトタイプ宣言                  */
 /***********************************************************/
-void load_image_data(); //画像読み込み用関数
+void load_image_data(char *file_name); //画像読み込み用関数
 
 
 /***********************************************************/
@@ -28,22 +28,16 @@ void load_image_data(); //画像読み込み用関数
  *pgm画像，横画素数，縦画素数のデータをファイルから読み込み
  *image1[][], x_size1, y_size1 にそれぞれ代入する関数
  */
-void load_image_data(){
+void load_image_data(char *file_name){
 
-	char file_name[MAX_FILENAME]; //ファイル名用の文字配列
 	char buffer[MAX_BUFFERSIZE];  //データ読み込み用作業変数
 	FILE *fp;                     //ファイルポインタ
 	int max_gray;                 //最大諧調値
 	int x, y;                     //ループ変数
 
-	printf("------------------------------------------------------------\n");
-	printf("                モノクロ階調画像入力ルーチン                \n");
-	printf("------------------------------------------------------------\n");
-	printf("ファイル形式はpgm，バイナリ形式とします\n" );
-	printf("入力ファイル名を入力してください(*.pgm) : ");
+	printf("%s を処理します\n", file_name);
 
 	/***** 入力ファイルのオープン *****/
-	scanf("%s",file_name);
 	fp = fopen(file_name,"rb");
 	if(NULL == fp){//fpがNULLなら入力失敗
 
@@ -81,11 +75,6 @@ void load_image_data(){
 			sscanf(buffer,"%d",&max_gray);
 	}
 
-	/***** 画面へのパラメータ表示 *****/
-	printf("横の画素数 : %d\n",x_size1);
-	printf("縦の画素数 : %d\n",y_size1);
-	printf("最大諧調値 : %d\n",max_gray);
-
 	/***** 読込む画像が適切かチェック *****/
 	if(x_size1 > MAX_IMAGESIZE || y_size1 > MAX_IMAGESIZE){//画像の大きさが想定値以内か調べる
 
@@ -104,8 +93,6 @@ void load_image_data(){
 		for( x= 0;x < x_size1;x++)
 			image1[y][x] = (unsigned char)fgetc(fp);
 
-	printf("データは正しく読み込まれました\n");
-	printf("------------------------------------------------------------\n");
 	fclose(fp);
 
 }
